@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Analogies - Word Vector Toolkit</title>
+    <link rel="stylesheet" href="/css/tailwind.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg border-b-4 border-primary">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center">
+                        <i class="fas fa-brain text-3xl text-primary mr-3"></i>
+                        <h1 class="text-2xl font-bold text-gray-800">Word Vector Toolkit</h1>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="text-gray-600 hover:text-primary transition-colors">Home</a>
+                    <span class="text-primary font-medium">Word Analogies</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-balance-scale text-primary mr-3"></i>
+                    Word Analogies
+                </h1>
+                <p class="text-lg text-gray-600">
+                    Solve word analogies using vector arithmetic. king - man + woman = queen
+                </p>
+            </div>
+
+            <!-- Input Form -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <form id="analogyForm" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label for="word1" class="block text-sm font-medium text-gray-700 mb-2">
+                                Word 1:
+                            </label>
+                            <input type="text" id="word1" name="word1" required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                   placeholder="e.g., king">
+                        </div>
+                        <div class="flex items-center justify-center">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-primary mb-2">-</div>
+                                <div class="text-sm text-gray-500">minus</div>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="word2" class="block text-sm font-medium text-gray-700 mb-2">
+                                Word 2:
+                            </label>
+                            <input type="text" id="word2" name="word2" required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                   placeholder="e.g., man">
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="flex items-center justify-center">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-primary mb-2">+</div>
+                                <div class="text-sm text-gray-500">plus</div>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="word3" class="block text-sm font-medium text-gray-700 mb-2">
+                                Word 3:
+                            </label>
+                            <input type="text" id="word3" name="word3" required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                   placeholder="e.g., woman">
+                        </div>
+                        <div class="flex items-center justify-center">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-primary mb-2">=</div>
+                                <div class="text-sm text-gray-500">equals</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center">
+                        <button type="submit" 
+                                class="bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-8 rounded-lg transition duration-300 flex items-center">
+                            <i class="fas fa-calculator mr-2"></i>
+                            Solve Analogy
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Preset Examples -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                    <i class="fas fa-lightbulb text-accent mr-2"></i>
+                    Try These Examples
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button class="preset-example text-left p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                            data-word1="king" data-word2="man" data-word3="woman">
+                        <div class="font-medium text-gray-800">king - man + woman</div>
+                        <div class="text-sm text-gray-500">Expected: queen</div>
+                    </button>
+                    <button class="preset-example text-left p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                            data-word1="paris" data-word2="france" data-word3="germany">
+                        <div class="font-medium text-gray-800">paris - france + germany</div>
+                        <div class="text-sm text-gray-500">Expected: berlin</div>
+                    </button>
+                    <button class="preset-example text-left p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                            data-word1="happy" data-word2="sad" data-word3="angry">
+                        <div class="font-medium text-gray-800">happy - sad + angry</div>
+                        <div class="text-sm text-gray-500">Expected: excited</div>
+                    </button>
+                    <button class="preset-example text-left p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                            data-word1="computer" data-word2="hardware" data-word3="software">
+                        <div class="font-medium text-gray-800">computer - hardware + software</div>
+                        <div class="text-sm text-gray-500">Expected: program</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div id="results" class="hidden">
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                        <i class="fas fa-list text-primary mr-2"></i>
+                        Analogy Results
+                    </h2>
+                    <div id="resultsList" class="space-y-2"></div>
+                </div>
+            </div>
+
+            <!-- Loading -->
+            <div id="loading" class="hidden text-center py-8">
+                <div class="inline-flex items-center">
+                    <i class="fas fa-spinner fa-spin text-primary text-2xl mr-3"></i>
+                    <span class="text-lg text-gray-600">Solving analogy...</span>
+                </div>
+            </div>
+
+            <!-- Error -->
+            <div id="error" class="hidden bg-red-50 border border-red-200 rounded-lg p-4">
+                <div class="flex items-center">
+                    <i class="fas fa-exclamation-triangle text-red-500 mr-3"></i>
+                    <span id="errorMessage" class="text-red-700"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    $(document).ready(function() {
+        // Handle form submission
+        $('#analogyForm').on('submit', function(e) {
+            e.preventDefault();
+            
+            const word1 = $('#word1').val().trim().toLowerCase();
+            const word2 = $('#word2').val().trim().toLowerCase();
+            const word3 = $('#word3').val().trim().toLowerCase();
+            
+            if (!word1 || !word2 || !word3) {
+                showError('Please fill in all three words');
+                return;
+            }
+            
+            // Show loading
+            $('#loading').removeClass('hidden');
+            $('#results').addClass('hidden');
+            $('#error').addClass('hidden');
+            
+            // Make API call
+            $.ajax({
+                url: `/api/word-analogies/${word1}/${word2}/${word3}`,
+                method: 'GET',
+                success: function(data) {
+                    $('#loading').addClass('hidden');
+                    displayResults(data, word1, word2, word3);
+                },
+                error: function(xhr) {
+                    $('#loading').addClass('hidden');
+                    const errorMsg = xhr.responseJSON?.error || 'An error occurred while solving the analogy';
+                    showError(errorMsg);
+                }
+            });
+        });
+        
+        // Handle preset examples
+        $('.preset-example').click(function() {
+            const word1 = $(this).data('word1');
+            const word2 = $(this).data('word2');
+            const word3 = $(this).data('word3');
+            
+            $('#word1').val(word1);
+            $('#word2').val(word2);
+            $('#word3').val(word3);
+            
+            $('#analogyForm').submit();
+        });
+        
+        function displayResults(data, word1, word2, word3) {
+            const resultsList = $('#resultsList');
+            resultsList.empty();
+            
+            // Add the analogy formula
+            const formula = $(`
+                <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                    <div class="text-center text-lg font-semibold text-gray-800">
+                        ${word1} - ${word2} + ${word3} = ?
+                    </div>
+                </div>
+            `);
+            resultsList.append(formula);
+            
+            if (data.analogies && data.analogies.length > 0) {
+                data.analogies.forEach((item, index) => {
+                    const similarity = (item.similarity * 100).toFixed(2);
+                    const card = $(`
+                        <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center">
+                                <span class="text-lg font-semibold text-primary mr-4">${index + 1}</span>
+                                <span class="text-xl font-medium text-gray-800">${item.word}</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-sm text-gray-500 mr-2">Similarity:</span>
+                                <span class="text-lg font-bold text-primary">${similarity}%</span>
+                            </div>
+                        </div>
+                    `);
+                    resultsList.append(card);
+                });
+                $('#results').removeClass('hidden');
+            } else {
+                showError('No analogy results found');
+            }
+        }
+        
+        function showError(message) {
+            $('#errorMessage').text(message);
+            $('#error').removeClass('hidden');
+        }
+    });
+    </script>
+</body>
+</html> 

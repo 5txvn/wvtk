@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Similar Words - Word Vector Toolkit</title>
+    <link rel="stylesheet" href="/css/tailwind.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg border-b-4 border-primary">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center">
+                        <i class="fas fa-brain text-3xl text-primary mr-3"></i>
+                        <h1 class="text-2xl font-bold text-gray-800">Word Vector Toolkit</h1>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="text-gray-600 hover:text-primary transition-colors">Home</a>
+                    <span class="text-primary font-medium">Similar Words</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-search text-primary mr-3"></i>
+                    Find Similar Words
+                </h1>
+                <p class="text-lg text-gray-600">
+                    Enter a word to find semantically similar words using vector similarity analysis.
+                </p>
+            </div>
+
+            <!-- Input Form -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <form id="similarWordsForm" class="space-y-4">
+                    <div>
+                        <label for="word" class="block text-sm font-medium text-gray-700 mb-2">
+                            Enter a word:
+                        </label>
+                        <input type="text" id="word" name="word" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                               placeholder="e.g., king, happy, computer">
+                    </div>
+                    <div>
+                        <label for="limit" class="block text-sm font-medium text-gray-700 mb-2">
+                            Number of results:
+                        </label>
+                        <select id="limit" name="limit"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <option value="10">10</option>
+                            <option value="20" selected>20</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                    <button type="submit" 
+                            class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-6 rounded-lg transition duration-300 flex items-center justify-center">
+                        <i class="fas fa-search mr-2"></i>
+                        Find Similar Words
+                    </button>
+                </form>
+            </div>
+
+            <!-- Results -->
+            <div id="results" class="hidden">
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                        <i class="fas fa-list text-primary mr-2"></i>
+                        Similar Words
+                    </h2>
+                    <div id="resultsList" class="space-y-2"></div>
+                </div>
+            </div>
+
+            <!-- Loading -->
+            <div id="loading" class="hidden text-center py-8">
+                <div class="inline-flex items-center">
+                    <i class="fas fa-spinner fa-spin text-primary text-2xl mr-3"></i>
+                    <span class="text-lg text-gray-600">Finding similar words...</span>
+                </div>
+            </div>
+
+            <!-- Error -->
+            <div id="error" class="hidden bg-red-50 border border-red-200 rounded-lg p-4">
+                <div class="flex items-center">
+                    <i class="fas fa-exclamation-triangle text-red-500 mr-3"></i>
+                    <span id="errorMessage" class="text-red-700"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    $(document).ready(function() {
+        $('#similarWordsForm').on('submit', function(e) {
+            e.preventDefault();
+            
+            const word = $('#word').val().trim().toLowerCase();
+            const limit = $('#limit').val();
+            
+            if (!word) {
+                showError('Please enter a word');
+                return;
+            }
+            
+            // Show loading
+            $('#loading').removeClass('hidden');
+            $('#results').addClass('hidden');
+            $('#error').addClass('hidden');
+            
+            // Make API call
+            $.ajax({
+                url: `/api/similar-words/${word}/${limit}`,
+                method: 'GET',
+                success: function(data) {
+                    $('#loading').addClass('hidden');
+                    displayResults(data);
+                },
+                error: function(xhr) {
+                    $('#loading').addClass('hidden');
+                    const errorMsg = xhr.responseJSON?.error || 'An error occurred while finding similar words';
+                    showError(errorMsg);
+                }
+            });
+        });
+        
+        function displayResults(data) {
+            const resultsList = $('#resultsList');
+            resultsList.empty();
+            
+            if (data.similar_words && data.similar_words.length > 0) {
+                data.similar_words.forEach((item, index) => {
+                    const similarity = (item.similarity * 100).toFixed(2);
+                    const card = $(`
+                        <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center">
+                                <span class="text-lg font-semibold text-primary mr-4">${index + 1}</span>
+                                <span class="text-xl font-medium text-gray-800">${item.word}</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-sm text-gray-500 mr-2">Similarity:</span>
+                                <span class="text-lg font-bold text-primary">${similarity}%</span>
+                            </div>
+                        </div>
+                    `);
+                    resultsList.append(card);
+                });
+                $('#results').removeClass('hidden');
+            } else {
+                showError('No similar words found');
+            }
+        }
+        
+        function showError(message) {
+            $('#errorMessage').text(message);
+            $('#error').removeClass('hidden');
+        }
+    });
+    </script>
+</body>
+</html> 

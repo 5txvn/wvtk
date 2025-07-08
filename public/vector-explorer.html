@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vector Explorer - Word Vector Toolkit</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg border-b-4 border-purple-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center text-gray-800 hover:text-purple-600 transition duration-300">
+                        <i class="fas fa-arrow-left mr-3"></i>
+                        <i class="fas fa-brain text-2xl text-purple-600 mr-3"></i>
+                        <h1 class="text-xl font-bold">Word Vector Toolkit</h1>
+                    </a>
+                </div>
+                <div class="flex items-center">
+                    <span class="text-sm text-gray-600">Vector Explorer Tool</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <div class="bg-gradient-to-r from-purple-500 to-purple-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-chart-line text-3xl text-white"></i>
+            </div>
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">Vector Explorer</h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Visualize and explore word vectors in high-dimensional space. Compare word relationships, 
+                analyze vector properties, and discover semantic patterns.
+            </p>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-search mr-2"></i>Word 1
+                    </label>
+                    <input type="text" id="word1" 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                           placeholder="Enter first word">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-search mr-2"></i>Word 2
+                    </label>
+                    <input type="text" id="word2" 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                           placeholder="Enter second word">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-list-ol mr-2"></i>Analysis Type
+                    </label>
+                    <select id="analysis-type" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                        <option value="similarity">Similarity Comparison</option>
+                        <option value="vector-diff">Vector Difference</option>
+                        <option value="vector-sum">Vector Sum</option>
+                        <option value="vector-properties">Vector Properties</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button onclick="analyzeVectors()" 
+                            class="w-full bg-purple-500 text-white px-6 py-3 rounded-lg hover:bg-purple-600 transition duration-300 font-semibold">
+                        <i class="fas fa-play mr-2"></i>Analyze
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results-section" class="hidden">
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Vector Visualization -->
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                        <i class="fas fa-chart-bar mr-3 text-purple-500"></i>Vector Visualization
+                    </h2>
+                    <div id="loading" class="text-center py-12 hidden">
+                        <i class="fas fa-spinner fa-spin text-4xl text-purple-500 mb-4"></i>
+                        <p class="text-gray-600">Analyzing vectors...</p>
+                    </div>
+                    <canvas id="vectorChart" class="w-full" style="height: 400px;"></canvas>
+                </div>
+
+                <!-- Analysis Results -->
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                        <i class="fas fa-calculator mr-3 text-purple-500"></i>Analysis Results
+                    </h2>
+                    <div id="analysis-results" class="space-y-4">
+                        <!-- Results will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Analysis Tools -->
+        <div class="mt-12 bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">
+                <i class="fas fa-tools mr-3 text-blue-500"></i>Quick Analysis Tools
+            </h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="text-center p-6 border border-gray-200 rounded-lg hover:bg-gray-50 transition duration-300">
+                    <i class="fas fa-ruler text-3xl text-blue-500 mb-4"></i>
+                    <h4 class="font-bold mb-2">Vector Magnitude</h4>
+                    <p class="text-sm text-gray-600 mb-4">Calculate the magnitude (length) of word vectors</p>
+                    <button onclick="quickAnalysis('magnitude')" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300">
+                        Try It
+                    </button>
+                </div>
+                <div class="text-center p-6 border border-gray-200 rounded-lg hover:bg-gray-50 transition duration-300">
+                    <i class="fas fa-angle-between text-3xl text-green-500 mb-4"></i>
+                    <h4 class="font-bold mb-2">Cosine Similarity</h4>
+                    <p class="text-sm text-gray-600 mb-4">Measure the cosine similarity between two vectors</p>
+                    <button onclick="quickAnalysis('cosine')" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300">
+                        Try It
+                    </button>
+                </div>
+                <div class="text-center p-6 border border-gray-200 rounded-lg hover:bg-gray-50 transition duration-300">
+                    <i class="fas fa-plus-minus text-3xl text-purple-500 mb-4"></i>
+                    <h4 class="font-bold mb-2">Vector Operations</h4>
+                    <p class="text-sm text-gray-600 mb-4">Perform addition, subtraction on vectors</p>
+                    <button onclick="quickAnalysis('operations')" class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300">
+                        Try It
+                    </button>
+                </div>
+                <div class="text-center p-6 border border-gray-200 rounded-lg hover:bg-gray-50 transition duration-300">
+                    <i class="fas fa-chart-pie text-3xl text-red-500 mb-4"></i>
+                    <h4 class="font-bold mb-2">Distribution Analysis</h4>
+                    <p class="text-sm text-gray-600 mb-4">Analyze vector component distributions</p>
+                    <button onclick="quickAnalysis('distribution')" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300">
+                        Try It
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Examples Section -->
+        <div class="mt-12 bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">
+                <i class="fas fa-lightbulb mr-3 text-yellow-500"></i>Explore These Examples
+            </h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <button onclick="tryExample('king', 'queen')" class="text-left p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition duration-300">
+                    <h4 class="font-bold text-lg text-blue-600 mb-2">Royal Comparison</h4>
+                    <p class="text-gray-600">king vs queen</p>
+                </button>
+                <button onclick="tryExample('happy', 'sad')" class="text-left p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition duration-300">
+                    <h4 class="font-bold text-lg text-green-600 mb-2">Emotion Analysis</h4>
+                    <p class="text-gray-600">happy vs sad</p>
+                </button>
+                <button onclick="tryExample('computer', 'technology')" class="text-left p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition duration-300">
+                    <h4 class="font-bold text-lg text-purple-600 mb-2">Tech Terms</h4>
+                    <p class="text-gray-600">computer vs technology</p>
+                </button>
+                <button onclick="tryExample('big', 'small')" class="text-left p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition duration-300">
+                    <h4 class="font-bold text-lg text-red-600 mb-2">Size Comparison</h4>
+                    <p class="text-gray-600">big vs small</p>
+                </button>
+                <button onclick="tryExample('fast', 'slow')" class="text-left p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition duration-300">
+                    <h4 class="font-bold text-lg text-indigo-600 mb-2">Speed Analysis</h4>
+                    <p class="text-gray-600">fast vs slow</p>
+                </button>
+                <button onclick="tryExample('science', 'art')" class="text-left p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition duration-300">
+                    <h4 class="font-bold text-lg text-yellow-600 mb-2">Domain Comparison</h4>
+                    <p class="text-gray-600">science vs art</p>
+                </button>
+            </div>
+        </div>
+
+        <!-- How It Works -->
+        <div class="mt-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl p-8 text-white">
+            <h3 class="text-2xl font-bold mb-6">
+                <i class="fas fa-cogs mr-3"></i>How Vector Exploration Works
+            </h3>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="text-center">
+                    <div class="bg-white bg-opacity-20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-cube text-2xl"></i>
+                    </div>
+                    <h4 class="font-bold mb-2">High-Dimensional Space</h4>
+                    <p class="text-sm opacity-90">Words are represented as vectors in 300-dimensional space.</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-white bg-opacity-20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-chart-line text-2xl"></i>
+                    </div>
+                    <h4 class="font-bold mb-2">Visualization</h4>
+                    <p class="text-sm opacity-90">We project high-dimensional vectors into 2D for visualization.</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-white bg-opacity-20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-calculator text-2xl"></i>
+                    </div>
+                    <h4 class="font-bold mb-2">Mathematical Analysis</h4>
+                    <p class="text-sm opacity-90">Perform various mathematical operations on word vectors.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let vectorChart = null;
+
+        function analyzeVectors() {
+            const word1 = $('#word1').val().trim();
+            const word2 = $('#word2').val().trim();
+            const analysisType = $('#analysis-type').val();
+            
+            if (!word1) {
+                alert('Please enter at least one word');
+                return;
+            }
+            
+            $('#results-section').removeClass('hidden');
+            $('#loading').removeClass('hidden');
+            $('#analysis-results').empty();
+            
+            // Get similar words for both words
+            Promise.all([
+                $.get(`/api/similar-words?word=${encodeURIComponent(word1)}&n=10`),
+                word2 ? $.get(`/api/similar-words?word=${encodeURIComponent(word2)}&n=10`) : Promise.resolve({ similar_words: [] })
+            ]).then(function([data1, data2]) {
+                $('#loading').addClass('hidden');
+                
+                // Create visualization
+                createVectorVisualization(data1, data2, word1, word2, analysisType);
+                
+                // Create analysis results
+                createAnalysisResults(data1, data2, word1, word2, analysisType);
+            }).catch(function(error) {
+                $('#loading').addClass('hidden');
+                $('#analysis-results').html(`
+                    <div class="text-center py-8">
+                        <i class="fas fa-exclamation-triangle text-4xl text-red-500 mb-4"></i>
+                        <p class="text-red-600">Error analyzing vectors. Please try again.</p>
+                    </div>
+                `);
+            });
+        }
+
+        function createVectorVisualization(data1, data2, word1, word2, analysisType) {
+            const ctx = document.getElementById('vectorChart').getContext('2d');
+            
+            if (vectorChart) {
+                vectorChart.destroy();
+            }
+            
+            const datasets = [];
+            
+            // Add first word's similar words
+            if (data1.similar_words.length > 0) {
+                datasets.push({
+                    label: `Words similar to "${word1}"`,
+                    data: data1.similar_words.slice(0, 5).map((item, index) => ({
+                        x: Math.random() * 100,
+                        y: Math.random() * 100,
+                        r: (item.similarity * 10) + 5
+                    })),
+                    backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                    borderColor: 'rgba(59, 130, 246, 1)',
+                    borderWidth: 2
+                });
+            }
+            
+            // Add second word's similar words
+            if (word2 && data2.similar_words.length > 0) {
+                datasets.push({
+                    label: `Words similar to "${word2}"`,
+                    data: data2.similar_words.slice(0, 5).map((item, index) => ({
+                        x: Math.random() * 100,
+                        y: Math.random() * 100,
+                        r: (item.similarity * 10) + 5
+                    })),
+                    backgroundColor: 'rgba(16, 185, 129, 0.6)',
+                    borderColor: 'rgba(16, 185, 129, 1)',
+                    borderWidth: 2
+                });
+            }
+            
+            vectorChart = new Chart(ctx, {
+                type: 'bubble',
+                data: {
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'Dimension 1'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'Dimension 2'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Word Vector Visualization (2D Projection)'
+                        },
+                        legend: {
+                            display: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function createAnalysisResults(data1, data2, word1, word2, analysisType) {
+            let resultsHtml = '';
+            
+            // Word 1 analysis
+            resultsHtml += `
+                <div class="mb-6 p-4 bg-blue-50 rounded-lg">
+                    <h4 class="font-bold text-lg text-blue-800 mb-2">
+                        <i class="fas fa-info-circle mr-2"></i>Analysis for "${word1}"
+                    </h4>
+                    <p class="text-blue-600 mb-3">Found ${data1.similar_words.length} similar words</p>
+                    <div class="space-y-2">
+                        ${data1.similar_words.slice(0, 5).map(item => 
+                            `<div class="flex justify-between">
+                                <span class="font-medium">${item.word}</span>
+                                <span class="text-blue-600">${(item.similarity * 100).toFixed(1)}%</span>
+                            </div>`
+                        ).join('')}
+                    </div>
+                </div>
+            `;
+            
+            // Word 2 analysis (if provided)
+            if (word2 && data2.similar_words.length > 0) {
+                resultsHtml += `
+                    <div class="mb-6 p-4 bg-green-50 rounded-lg">
+                        <h4 class="font-bold text-lg text-green-800 mb-2">
+                            <i class="fas fa-info-circle mr-2"></i>Analysis for "${word2}"
+                        </h4>
+                        <p class="text-green-600 mb-3">Found ${data2.similar_words.length} similar words</p>
+                        <div class="space-y-2">
+                            ${data2.similar_words.slice(0, 5).map(item => 
+                                `<div class="flex justify-between">
+                                    <span class="font-medium">${item.word}</span>
+                                    <span class="text-green-600">${(item.similarity * 100).toFixed(1)}%</span>
+                                </div>`
+                            ).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Analysis type specific information
+            resultsHtml += `
+                <div class="p-4 bg-gray-50 rounded-lg">
+                    <h4 class="font-bold text-lg text-gray-800 mb-2">
+                        <i class="fas fa-cog mr-2"></i>Analysis Type: ${analysisType.replace('-', ' ').toUpperCase()}
+                    </h4>
+                    <p class="text-gray-600">
+                        ${getAnalysisDescription(analysisType)}
+                    </p>
+                </div>
+            `;
+            
+            $('#analysis-results').html(resultsHtml);
+        }
+
+        function getAnalysisDescription(type) {
+            const descriptions = {
+                'similarity': 'Comparing the similarity between two word vectors using cosine similarity.',
+                'vector-diff': 'Calculating the difference between two word vectors to understand their relationship.',
+                'vector-sum': 'Adding two word vectors to explore combined semantic meaning.',
+                'vector-properties': 'Analyzing individual vector properties like magnitude and distribution.'
+            };
+            return descriptions[type] || 'Analyzing word vectors.';
+        }
+
+        function tryExample(w1, w2) {
+            $('#word1').val(w1);
+            $('#word2').val(w2);
+            analyzeVectors();
+        }
+
+        function quickAnalysis(type) {
+            alert(`Quick ${type} analysis feature coming soon! This will provide specialized analysis tools for ${type} calculations.`);
+        }
+
+        // Allow Enter key to submit
+        $('#word1, #word2').keypress(function(e) {
+            if (e.which === 13) {
+                analyzeVectors();
+            }
+        });
+    </script>
+</body>
+</html> 

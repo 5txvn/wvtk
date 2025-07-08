@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vector Explorer - Word Vector Toolkit</title>
+    <link rel="stylesheet" href="/css/tailwind.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg border-b-4 border-primary">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center">
+                        <i class="fas fa-brain text-3xl text-primary mr-3"></i>
+                        <h1 class="text-2xl font-bold text-gray-800">Word Vector Toolkit</h1>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="text-gray-600 hover:text-primary transition-colors">Home</a>
+                    <span class="text-primary font-medium">Vector Explorer</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-6xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-chart-line text-primary mr-3"></i>
+                    Vector Explorer
+                </h1>
+                <p class="text-lg text-gray-600">
+                    Explore vector statistics and visualize the distribution of word vectors in our dataset.
+                </p>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+                    <i class="fas fa-words text-primary text-3xl mb-3"></i>
+                    <div class="text-2xl font-bold text-primary mb-1" id="vocabSize">Loading...</div>
+                    <div class="text-gray-600">Vocabulary Size</div>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+                    <i class="fas fa-cube text-primary text-3xl mb-3"></i>
+                    <div class="text-2xl font-bold text-primary mb-1" id="vectorDims">Loading...</div>
+                    <div class="text-gray-600">Vector Dimensions</div>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+                    <i class="fas fa-chart-bar text-primary text-3xl mb-3"></i>
+                    <div class="text-2xl font-bold text-primary mb-1" id="avgMagnitude">Loading...</div>
+                    <div class="text-gray-600">Avg Magnitude</div>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+                    <i class="fas fa-percentage text-primary text-3xl mb-3"></i>
+                    <div class="text-2xl font-bold text-primary mb-1" id="coverage">Loading...</div>
+                    <div class="text-gray-600">Coverage</div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Magnitude Distribution -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">
+                        <i class="fas fa-chart-bar text-primary mr-2"></i>
+                        Vector Magnitude Distribution
+                    </h3>
+                    <canvas id="magnitudeChart" width="400" height="300"></canvas>
+                </div>
+
+                <!-- Similarity Distribution -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">
+                        <i class="fas fa-chart-pie text-primary mr-2"></i>
+                        Similarity Score Distribution
+                    </h3>
+                    <canvas id="similarityChart" width="400" height="300"></canvas>
+                </div>
+            </div>
+
+            <!-- Word Search Section -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mt-8">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">
+                    <i class="fas fa-search text-primary mr-2"></i>
+                    Explore Individual Words
+                </h3>
+                <div class="flex gap-4 mb-4">
+                    <input type="text" id="wordSearch" 
+                           class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                           placeholder="Enter a word to explore its vector properties">
+                    <button id="searchWord" 
+                            class="bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-6 rounded-lg transition duration-300">
+                        <i class="fas fa-search mr-2"></i>
+                        Search
+                    </button>
+                </div>
+                <div id="wordDetails" class="hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <div class="text-sm text-gray-500">Vector Magnitude</div>
+                            <div class="text-lg font-semibold text-primary" id="wordMagnitude">-</div>
+                        </div>
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <div class="text-sm text-gray-500">Vector Index</div>
+                            <div class="text-lg font-semibold text-primary" id="wordIndex">-</div>
+                        </div>
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <div class="text-sm text-gray-500">Normalized Magnitude</div>
+                            <div class="text-lg font-semibold text-primary" id="wordNormMagnitude">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading -->
+            <div id="loading" class="hidden text-center py-8">
+                <div class="inline-flex items-center">
+                    <i class="fas fa-spinner fa-spin text-primary text-2xl mr-3"></i>
+                    <span class="text-lg text-gray-600">Loading vector statistics...</span>
+                </div>
+            </div>
+
+            <!-- Error -->
+            <div id="error" class="hidden bg-red-50 border border-red-200 rounded-lg p-4">
+                <div class="flex items-center">
+                    <i class="fas fa-exclamation-triangle text-red-500 mr-3"></i>
+                    <span id="errorMessage" class="text-red-700"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    $(document).ready(function() {
+        let magnitudeChart, similarityChart;
+        
+        // Load initial statistics
+        loadVectorStats();
+        
+        // Handle word search
+        $('#searchWord').click(function() {
+            const word = $('#wordSearch').val().trim().toLowerCase();
+            if (word) {
+                searchWord(word);
+            }
+        });
+        
+        // Allow Enter key to trigger search
+        $('#wordSearch').keypress(function(e) {
+            if (e.which === 13) {
+                $('#searchWord').click();
+            }
+        });
+        
+        function loadVectorStats() {
+            $('#loading').removeClass('hidden');
+            $('#error').addClass('hidden');
+            
+            $.ajax({
+                url: '/api/vector-stats',
+                method: 'GET',
+                success: function(data) {
+                    $('#loading').addClass('hidden');
+                    updateStats(data);
+                    createCharts(data);
+                },
+                error: function(xhr) {
+                    $('#loading').addClass('hidden');
+                    const errorMsg = xhr.responseJSON?.error || 'Failed to load vector statistics';
+                    showError(errorMsg);
+                }
+            });
+        }
+        
+        function updateStats(data) {
+            $('#vocabSize').text(data.vocabulary_size.toLocaleString());
+            $('#vectorDims').text(data.vector_dimensions);
+            $('#avgMagnitude').text(data.average_magnitude.toFixed(3));
+            $('#coverage').text(data.coverage_percentage.toFixed(1) + '%');
+        }
+        
+        function createCharts(data) {
+            // Magnitude Distribution Chart
+            const magnitudeCtx = document.getElementById('magnitudeChart').getContext('2d');
+            magnitudeChart = new Chart(magnitudeCtx, {
+                type: 'bar',
+                data: {
+                    labels: data.magnitude_distribution.labels,
+                    datasets: [{
+                        label: 'Number of Vectors',
+                        data: data.magnitude_distribution.values,
+                        backgroundColor: '#003f88',
+                        borderColor: '#00296b',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: '#e5e7eb'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: '#e5e7eb'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+            
+            // Similarity Distribution Chart
+            const similarityCtx = document.getElementById('similarityChart').getContext('2d');
+            similarityChart = new Chart(similarityCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.similarity_distribution.labels,
+                    datasets: [{
+                        data: data.similarity_distribution.values,
+                        backgroundColor: [
+                            '#00296b',
+                            '#003f88',
+                            '#00509d',
+                            '#fdc500',
+                            '#ffd500'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+        
+        function searchWord(word) {
+            $.ajax({
+                url: `/api/word-details/${word}`,
+                method: 'GET',
+                success: function(data) {
+                    $('#wordMagnitude').text(data.magnitude.toFixed(4));
+                    $('#wordIndex').text(data.index);
+                    $('#wordNormMagnitude').text(data.normalized_magnitude.toFixed(4));
+                    $('#wordDetails').removeClass('hidden');
+                },
+                error: function(xhr) {
+                    const errorMsg = xhr.responseJSON?.error || 'Word not found in vocabulary';
+                    showError(errorMsg);
+                }
+            });
+        }
+        
+        function showError(message) {
+            $('#errorMessage').text(message);
+            $('#error').removeClass('hidden');
+        }
+    });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Similar Words - Word Vector Toolkit</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg border-b-4 border-blue-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center text-gray-800 hover:text-blue-600 transition duration-300">
+                        <i class="fas fa-arrow-left mr-3"></i>
+                        <i class="fas fa-brain text-2xl text-blue-600 mr-3"></i>
+                        <h1 class="text-xl font-bold">Word Vector Toolkit</h1>
+                    </a>
+                </div>
+                <div class="flex items-center">
+                    <span class="text-sm text-gray-600">Similar Words Tool</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <div class="bg-gradient-to-r from-blue-500 to-blue-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-search text-3xl text-white"></i>
+            </div>
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">Find Similar Words</h1>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                Discover words with similar meanings using advanced vector similarity calculations. 
+                Enter any word to find its semantic neighbors in our vector space.
+            </p>
+        </div>
+
+        <!-- Input Section -->
+        <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+            <div class="max-w-2xl mx-auto">
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <div class="flex-1">
+                        <label for="word-input" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-keyboard mr-2"></i>Enter a word
+                        </label>
+                        <input type="text" id="word-input" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="e.g., king, computer, happy, science..."
+                               onkeypress="if(event.key==='Enter') findSimilarWords()">
+                    </div>
+                    <div class="flex-1">
+                        <label for="num-results" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-list-ol mr-2"></i>Number of results
+                        </label>
+                        <select id="num-results" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="5">5 results</option>
+                            <option value="10" selected>10 results</option>
+                            <option value="15">15 results</option>
+                            <option value="20">20 results</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mt-6 text-center">
+                    <button onclick="findSimilarWords()" 
+                            class="bg-blue-500 text-white px-8 py-3 rounded-lg hover:bg-blue-600 transition duration-300 font-semibold">
+                        <i class="fas fa-search mr-2"></i>Find Similar Words
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results-section" class="hidden">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">
+                        <i class="fas fa-chart-bar mr-3 text-blue-500"></i>Similar Words
+                    </h2>
+                    <button onclick="exportResults()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300">
+                        <i class="fas fa-download mr-2"></i>Export
+                    </button>
+                </div>
+                
+                <div id="loading" class="text-center py-12 hidden">
+                    <i class="fas fa-spinner fa-spin text-4xl text-blue-500 mb-4"></i>
+                    <p class="text-gray-600">Finding similar words...</p>
+                </div>
+
+                <div id="results-content" class="space-y-4">
+                    <!-- Results will be populated here -->
+                </div>
+
+                <div id="error-message" class="hidden text-center py-8">
+                    <i class="fas fa-exclamation-triangle text-4xl text-red-500 mb-4"></i>
+                    <p class="text-red-600 text-lg" id="error-text"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Examples Section -->
+        <div class="mt-12 bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">
+                <i class="fas fa-lightbulb mr-3 text-yellow-500"></i>Try These Examples
+            </h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <button onclick="tryExample('king')" class="bg-blue-100 text-blue-800 px-4 py-3 rounded-lg hover:bg-blue-200 transition duration-300 font-medium">
+                    king
+                </button>
+                <button onclick="tryExample('computer')" class="bg-green-100 text-green-800 px-4 py-3 rounded-lg hover:bg-green-200 transition duration-300 font-medium">
+                    computer
+                </button>
+                <button onclick="tryExample('happy')" class="bg-yellow-100 text-yellow-800 px-4 py-3 rounded-lg hover:bg-yellow-200 transition duration-300 font-medium">
+                    happy
+                </button>
+                <button onclick="tryExample('science')" class="bg-purple-100 text-purple-800 px-4 py-3 rounded-lg hover:bg-purple-200 transition duration-300 font-medium">
+                    science
+                </button>
+            </div>
+        </div>
+
+        <!-- How It Works -->
+        <div class="mt-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-8 text-white">
+            <h3 class="text-2xl font-bold mb-6">
+                <i class="fas fa-cogs mr-3"></i>How It Works
+            </h3>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="text-center">
+                    <div class="bg-white bg-opacity-20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-cube text-2xl"></i>
+                    </div>
+                    <h4 class="font-bold mb-2">Vector Representation</h4>
+                    <p class="text-sm opacity-90">Each word is represented as a high-dimensional vector capturing its semantic meaning.</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-white bg-opacity-20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-calculator text-2xl"></i>
+                    </div>
+                    <h4 class="font-bold mb-2">Similarity Calculation</h4>
+                    <p class="text-sm opacity-90">We calculate cosine similarity between the input word and all other words in our vocabulary.</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-white bg-opacity-20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-sort-amount-down text-2xl"></i>
+                    </div>
+                    <h4 class="font-bold mb-2">Ranking Results</h4>
+                    <p class="text-sm opacity-90">Words are ranked by similarity score and the top results are displayed.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function findSimilarWords() {
+            const word = $('#word-input').val().trim();
+            const numResults = $('#num-results').val();
+            
+            if (!word) {
+                alert('Please enter a word');
+                return;
+            }
+            
+            $('#results-section').removeClass('hidden');
+            $('#loading').removeClass('hidden');
+            $('#results-content').empty();
+            $('#error-message').addClass('hidden');
+            
+            $.get(`/api/similar-words?word=${encodeURIComponent(word)}&n=${numResults}`)
+                .done(function(data) {
+                    $('#loading').addClass('hidden');
+                    
+                    if (data.similar_words.length === 0) {
+                        $('#error-text').text('No similar words found for this term.');
+                        $('#error-message').removeClass('hidden');
+                        return;
+                    }
+                    
+                    let resultsHtml = `
+                        <div class="mb-6 p-4 bg-blue-50 rounded-lg">
+                            <h4 class="font-bold text-lg text-blue-800 mb-2">
+                                <i class="fas fa-info-circle mr-2"></i>Results for "${word}"
+                            </h4>
+                            <p class="text-blue-600">Found ${data.similar_words.length} similar words</p>
+                        </div>
+                    `;
+                    
+                    data.similar_words.forEach((item, index) => {
+                        const similarityPercent = (item.similarity * 100).toFixed(1);
+                        const colorClass = item.similarity > 0.8 ? 'bg-green-100 text-green-800' : 
+                                          item.similarity > 0.6 ? 'bg-blue-100 text-blue-800' : 
+                                          item.similarity > 0.4 ? 'bg-yellow-100 text-yellow-800' : 
+                                          'bg-gray-100 text-gray-800';
+                        
+                        resultsHtml += `
+                            <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition duration-300">
+                                <div class="flex items-center">
+                                    <span class="bg-gray-200 text-gray-700 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold mr-4">
+                                        ${index + 1}
+                                    </span>
+                                    <div>
+                                        <h5 class="font-bold text-lg">${item.word}</h5>
+                                        <p class="text-gray-600">Similarity score</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span class="inline-block ${colorClass} px-3 py-1 rounded-full font-semibold">
+                                        ${similarityPercent}%
+                                    </span>
+                                    <div class="w-32 bg-gray-200 rounded-full h-2 mt-2">
+                                        <div class="bg-blue-500 h-2 rounded-full" style="width: ${similarityPercent}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    $('#results-content').html(resultsHtml);
+                })
+                .fail(function(xhr) {
+                    $('#loading').addClass('hidden');
+                    let errorMsg = 'An error occurred while finding similar words.';
+                    
+                    if (xhr.responseJSON && xhr.responseJSON.error) {
+                        errorMsg = xhr.responseJSON.error;
+                    }
+                    
+                    $('#error-text').text(errorMsg);
+                    $('#error-message').removeClass('hidden');
+                });
+        }
+
+        function tryExample(word) {
+            $('#word-input').val(word);
+            findSimilarWords();
+        }
+
+        function exportResults() {
+            const results = [];
+            $('.flex.items-center.justify-between.p-4').each(function() {
+                const word = $(this).find('h5').text();
+                const similarity = $(this).find('.inline-block').text();
+                results.push({ word, similarity });
+            });
+            
+            if (results.length === 0) {
+                alert('No results to export');
+                return;
+            }
+            
+            const csv = 'Word,Similarity\n' + results.map(r => `${r.word},${r.similarity}`).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'similar_words.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Allow Enter key to submit
+        $('#word-input').keypress(function(e) {
+            if (e.which === 13) {
+                findSimilarWords();
+            }
+        });
+    </script>
+</body>
+</html> 

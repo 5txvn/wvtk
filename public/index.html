@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Vector Toolkit - AI-Powered Word Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg border-b-4 border-purple-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <i class="fas fa-brain text-3xl text-purple-600 mr-3"></i>
+                    <h1 class="text-2xl font-bold text-gray-800">Word Vector Toolkit</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-600">AI-Powered Word Analysis</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="gradient-bg text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="animate-float">
+                <i class="fas fa-cube text-6xl mb-6 opacity-80"></i>
+            </div>
+            <h1 class="text-5xl font-bold mb-6">Explore Word Vectors</h1>
+            <p class="text-xl mb-8 opacity-90 max-w-3xl mx-auto">
+                Discover the hidden relationships between words using advanced vector mathematics. 
+                Our AI-powered toolkit helps you understand semantic similarities, analogies, and word clusters.
+            </p>
+            <div class="flex justify-center space-x-4">
+                <button onclick="scrollToTools()" class="bg-white text-purple-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition duration-300">
+                    <i class="fas fa-rocket mr-2"></i>Get Started
+                </button>
+                <button onclick="showStats()" class="border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-purple-600 transition duration-300">
+                    <i class="fas fa-chart-bar mr-2"></i>View Stats
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div id="stats-section" class="bg-white py-16 hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Dataset Statistics</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center p-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg text-white">
+                    <i class="fas fa-book text-4xl mb-4"></i>
+                    <div class="text-3xl font-bold" id="vocab-size">Loading...</div>
+                    <div class="text-lg">Vocabulary Size</div>
+                </div>
+                <div class="text-center p-6 bg-gradient-to-br from-green-500 to-green-600 rounded-lg text-white">
+                    <i class="fas fa-cube text-4xl mb-4"></i>
+                    <div class="text-3xl font-bold" id="vector-dims">Loading...</div>
+                    <div class="text-lg">Vector Dimensions</div>
+                </div>
+                <div class="text-center p-6 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg text-white">
+                    <i class="fas fa-database text-4xl mb-4"></i>
+                    <div class="text-3xl font-bold" id="total-vectors">Loading...</div>
+                    <div class="text-lg">Total Vectors</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tools Section -->
+    <div id="tools-section" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold text-center mb-16 text-gray-800">Explore Our Tools</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Similar Words Tool -->
+                <div class="bg-white rounded-xl shadow-lg card-hover overflow-hidden">
+                    <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-6 text-white">
+                        <i class="fas fa-search text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Similar Words</h3>
+                        <p class="opacity-90">Find words with similar meanings using vector similarity</p>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 mb-4">Discover words that are semantically similar to any input word using cosine similarity calculations.</p>
+                        <a href="/similar-words" class="inline-flex items-center bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-300">
+                            <i class="fas fa-arrow-right mr-2"></i>Try Tool
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Word Analogies Tool -->
+                <div class="bg-white rounded-xl shadow-lg card-hover overflow-hidden">
+                    <div class="bg-gradient-to-r from-green-500 to-green-600 p-6 text-white">
+                        <i class="fas fa-balance-scale text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Word Analogies</h3>
+                        <p class="opacity-90">Solve word analogies using vector arithmetic</p>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 mb-4">Explore relationships like "king - man + woman = queen" using vector operations.</p>
+                        <a href="/word-analogies" class="inline-flex items-center bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition duration-300">
+                            <i class="fas fa-arrow-right mr-2"></i>Try Tool
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Vector Explorer Tool -->
+                <div class="bg-white rounded-xl shadow-lg card-hover overflow-hidden">
+                    <div class="bg-gradient-to-r from-purple-500 to-purple-600 p-6 text-white">
+                        <i class="fas fa-chart-line text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Vector Explorer</h3>
+                        <p class="opacity-90">Visualize and explore word vectors</p>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 mb-4">Interactive visualization of word vectors and their relationships in high-dimensional space.</p>
+                        <a href="/vector-explorer" class="inline-flex items-center bg-purple-500 text-white px-6 py-3 rounded-lg hover:bg-purple-600 transition duration-300">
+                            <i class="fas fa-arrow-right mr-2"></i>Try Tool
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Word Clustering Tool -->
+                <div class="bg-white rounded-xl shadow-lg card-hover overflow-hidden">
+                    <div class="bg-gradient-to-r from-red-500 to-red-600 p-6 text-white">
+                        <i class="fas fa-sitemap text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Word Clustering</h3>
+                        <p class="opacity-90">Group similar words into clusters</p>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 mb-4">Automatically group words into semantic clusters based on their vector similarities.</p>
+                        <a href="/word-clustering" class="inline-flex items-center bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 transition duration-300">
+                            <i class="fas fa-arrow-right mr-2"></i>Try Tool
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Demo -->
+                <div class="bg-white rounded-xl shadow-lg card-hover overflow-hidden">
+                    <div class="bg-gradient-to-r from-yellow-500 to-yellow-600 p-6 text-white">
+                        <i class="fas fa-play-circle text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Quick Demo</h3>
+                        <p class="opacity-90">See word vectors in action</p>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 mb-4">Try a quick demonstration of word similarity with popular words.</p>
+                        <button onclick="runQuickDemo()" class="inline-flex items-center bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 transition duration-300">
+                            <i class="fas fa-play mr-2"></i>Run Demo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- API Access -->
+                <div class="bg-white rounded-xl shadow-lg card-hover overflow-hidden">
+                    <div class="bg-gradient-to-r from-indigo-500 to-indigo-600 p-6 text-white">
+                        <i class="fas fa-code text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">API Access</h3>
+                        <p class="opacity-90">Programmatic access to word vectors</p>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 mb-4">Access our word vector API for integration into your own applications.</p>
+                        <button onclick="showAPIInfo()" class="inline-flex items-center bg-indigo-500 text-white px-6 py-3 rounded-lg hover:bg-indigo-600 transition duration-300">
+                            <i class="fas fa-info-circle mr-2"></i>Learn More
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <i class="fas fa-brain text-3xl text-purple-400 mb-4"></i>
+                <h3 class="text-xl font-bold mb-2">Word Vector Toolkit</h3>
+                <p class="text-gray-400 mb-4">Powered by advanced AI and vector mathematics</p>
+                <div class="flex justify-center space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <i class="fab fa-github text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <i class="fas fa-envelope text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Demo Modal -->
+    <div id="demo-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-xl max-w-2xl w-full p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold">Quick Demo Results</h3>
+                    <button onclick="closeDemoModal()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <div id="demo-results" class="space-y-4">
+                    <!-- Results will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load stats on page load
+        $(document).ready(function() {
+            loadStats();
+        });
+
+        function loadStats() {
+            $.get('/api/vector-stats')
+                .done(function(data) {
+                    $('#vocab-size').text(data.vocabulary_size.toLocaleString());
+                    $('#vector-dims').text(data.vector_dimensions);
+                    $('#total-vectors').text(data.total_vectors.toLocaleString());
+                })
+                .fail(function() {
+                    $('#vocab-size').text('Error');
+                    $('#vector-dims').text('Error');
+                    $('#total-vectors').text('Error');
+                });
+        }
+
+        function scrollToTools() {
+            $('html, body').animate({
+                scrollTop: $('#tools-section').offset().top - 100
+            }, 1000);
+        }
+
+        function showStats() {
+            $('#stats-section').toggleClass('hidden');
+            if (!$('#stats-section').hasClass('hidden')) {
+                $('html, body').animate({
+                    scrollTop: $('#stats-section').offset().top - 100
+                }, 1000);
+            }
+        }
+
+        function runQuickDemo() {
+            const demoWords = ['king', 'computer', 'happy', 'science'];
+            let results = '';
+            
+            $('#demo-results').html('<div class="text-center"><i class="fas fa-spinner fa-spin text-2xl text-blue-500"></i><p class="mt-2">Loading demo results...</p></div>');
+            $('#demo-modal').removeClass('hidden');
+            
+            let completed = 0;
+            demoWords.forEach(word => {
+                $.get(`/api/similar-words?word=${word}&n=5`)
+                    .done(function(data) {
+                        results += `
+                            <div class="border-l-4 border-blue-500 pl-4">
+                                <h4 class="font-bold text-lg text-blue-600">${word}</h4>
+                                <div class="flex flex-wrap gap-2 mt-2">
+                                    ${data.similar_words.map(item => 
+                                        `<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm">${item.word} (${(item.similarity * 100).toFixed(1)}%)</span>`
+                                    ).join('')}
+                                </div>
+                            </div>
+                        `;
+                        completed++;
+                        if (completed === demoWords.length) {
+                            $('#demo-results').html(results);
+                        }
+                    })
+                    .fail(function() {
+                        completed++;
+                        if (completed === demoWords.length) {
+                            $('#demo-results').html('<p class="text-red-500">Error loading demo results. Please try again.</p>');
+                        }
+                    });
+            });
+        }
+
+        function closeDemoModal() {
+            $('#demo-modal').addClass('hidden');
+        }
+
+        function showAPIInfo() {
+            alert('API Endpoints:\n\n' +
+                  'GET /api/similar-words?word=<word>&n=<number>\n' +
+                  'POST /api/word-analogies\n' +
+                  'GET /api/vector-stats\n' +
+                  'POST /api/cluster-words\n\n' +
+                  'Check the browser console for more details.');
+        }
+
+        // Close modal when clicking outside
+        $('#demo-modal').click(function(e) {
+            if (e.target === this) {
+                closeDemoModal();
+            }
+        });
+    </script>
+</body>
+</html> 

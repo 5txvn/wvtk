@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom colors */
+:root {
+    --color-primary-dark: #00296b;
+    --color-primary: #003f88;
+    --color-primary-light: #00509d;
+    --color-accent: #fdc500;
+    --color-accent-light: #ffd500;
+}
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+    width: 16px;
+}
+
+::-webkit-scrollbar-track {
+    background: #ffffff;
+    border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #00296b;
+    border-radius: 8px;
+    border: 2px solid #ffffff;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #003f88;
+}
+
+::-webkit-scrollbar-corner {
+    background: #ffffff;
+}
+
+/* Firefox scrollbar */
+* {
+    scrollbar-width: auto;
+    scrollbar-color: #00296b #ffffff;
+}
+
+/* For older browsers */
+html {
+    scrollbar-face-color: #00296b;
+    scrollbar-track-color: #ffffff;
+    scrollbar-arrow-color: #00296b;
+    scrollbar-shadow-color: #ffffff;
+}
+
+/* Apply to body and all scrollable elements */
+body, html {
+    scrollbar-width: auto;
+    scrollbar-color: #00296b #ffffff;
+} 

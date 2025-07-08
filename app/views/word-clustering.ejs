@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Clustering - Word Vector Toolkit</title>
+    <link rel="stylesheet" href="/css/tailwind.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg border-b-4 border-primary">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center">
+                        <i class="fas fa-brain text-3xl text-primary mr-3"></i>
+                        <h1 class="text-2xl font-bold text-gray-800">Word Vector Toolkit</h1>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="text-gray-600 hover:text-primary transition-colors">Home</a>
+                    <span class="text-primary font-medium">Word Clustering</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-6xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-sitemap text-primary mr-3"></i>
+                    Word Clustering
+                </h1>
+                <p class="text-lg text-gray-600">
+                    Group words into clusters based on their semantic similarity using vector analysis.
+                </p>
+            </div>
+
+            <!-- Input Form -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <form id="clusteringForm" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="words" class="block text-sm font-medium text-gray-700 mb-2">
+                                Enter words (comma-separated):
+                            </label>
+                            <textarea id="words" name="words" rows="4" required
+                                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                      placeholder="e.g., king, queen, prince, princess, man, woman, boy, girl, computer, laptop, phone, tablet"></textarea>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="numClusters" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Number of clusters:
+                                </label>
+                                <select id="numClusters" name="numClusters"
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                    <option value="2">2</option>
+                                    <option value="3" selected>3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="algorithm" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Clustering algorithm:
+                                </label>
+                                <select id="algorithm" name="algorithm"
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                    <option value="kmeans">K-Means</option>
+                                    <option value="hierarchical">Hierarchical</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" 
+                            class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-6 rounded-lg transition duration-300 flex items-center justify-center">
+                        <i class="fas fa-sitemap mr-2"></i>
+                        Create Clusters
+                    </button>
+                </form>
+            </div>
+
+            <!-- Preset Examples -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                    <i class="fas fa-lightbulb text-accent mr-2"></i>
+                    Try These Examples
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button class="preset-example text-left p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                            data-words="king, queen, prince, princess, man, woman, boy, girl" data-clusters="2">
+                        <div class="font-medium text-gray-800">Royalty vs People</div>
+                        <div class="text-sm text-gray-500">8 words, 2 clusters</div>
+                    </button>
+                    <button class="preset-example text-left p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                            data-words="computer, laptop, phone, tablet, car, bike, train, plane" data-clusters="2">
+                        <div class="font-medium text-gray-800">Technology vs Transportation</div>
+                        <div class="text-sm text-gray-500">8 words, 2 clusters</div>
+                    </button>
+                    <button class="preset-example text-left p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                            data-words="happy, sad, angry, excited, calm, nervous, confident, shy" data-clusters="3">
+                        <div class="font-medium text-gray-800">Emotions</div>
+                        <div class="text-sm text-gray-500">8 words, 3 clusters</div>
+                    </button>
+                    <button class="preset-example text-left p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                            data-words="red, blue, green, yellow, apple, banana, orange, grape" data-clusters="2">
+                        <div class="font-medium text-gray-800">Colors vs Fruits</div>
+                        <div class="text-sm text-gray-500">8 words, 2 clusters</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div id="results" class="hidden">
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                        <i class="fas fa-list text-primary mr-2"></i>
+                        Clustering Results
+                    </h2>
+                    <div id="clustersList" class="space-y-6"></div>
+                </div>
+            </div>
+
+            <!-- Loading -->
+            <div id="loading" class="hidden text-center py-8">
+                <div class="inline-flex items-center">
+                    <i class="fas fa-spinner fa-spin text-primary text-2xl mr-3"></i>
+                    <span class="text-lg text-gray-600">Creating clusters...</span>
+                </div>
+            </div>
+
+            <!-- Error -->
+            <div id="error" class="hidden bg-red-50 border border-red-200 rounded-lg p-4">
+                <div class="flex items-center">
+                    <i class="fas fa-exclamation-triangle text-red-500 mr-3"></i>
+                    <span id="errorMessage" class="text-red-700"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    $(document).ready(function() {
+        // Handle form submission
+        $('#clusteringForm').on('submit', function(e) {
+            e.preventDefault();
+            
+            const words = $('#words').val().trim();
+            const numClusters = $('#numClusters').val();
+            const algorithm = $('#algorithm').val();
+            
+            if (!words) {
+                showError('Please enter some words to cluster');
+                return;
+            }
+            
+            // Show loading
+            $('#loading').removeClass('hidden');
+            $('#results').addClass('hidden');
+            $('#error').addClass('hidden');
+            
+            // Make API call
+            $.ajax({
+                url: '/api/word-clustering',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    words: words.split(',').map(w => w.trim()),
+                    num_clusters: parseInt(numClusters),
+                    algorithm: algorithm
+                }),
+                success: function(data) {
+                    $('#loading').addClass('hidden');
+                    displayResults(data);
+                },
+                error: function(xhr) {
+                    $('#loading').addClass('hidden');
+                    const errorMsg = xhr.responseJSON?.error || 'An error occurred while creating clusters';
+                    showError(errorMsg);
+                }
+            });
+        });
+        
+        // Handle preset examples
+        $('.preset-example').click(function() {
+            const words = $(this).data('words');
+            const clusters = $(this).data('clusters');
+            
+            $('#words').val(words);
+            $('#numClusters').val(clusters);
+            
+            $('#clusteringForm').submit();
+        });
+        
+        function displayResults(data) {
+            const clustersList = $('#clustersList');
+            clustersList.empty();
+            
+            if (data.clusters && data.clusters.length > 0) {
+                data.clusters.forEach((cluster, clusterIndex) => {
+                    const clusterCard = $(`
+                        <div class="border border-gray-200 rounded-lg p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                                <i class="fas fa-circle text-primary mr-2"></i>
+                                Cluster ${clusterIndex + 1} (${cluster.words.length} words)
+                            </h3>
+                            <div class="flex flex-wrap gap-2">
+                                ${cluster.words.map(word => `
+                                    <span class="bg-primary text-white px-3 py-1 rounded-full text-sm font-medium">
+                                        ${word}
+                                    </span>
+                                `).join('')}
+                            </div>
+                            ${cluster.centroid ? `
+                                <div class="mt-4 text-sm text-gray-600">
+                                    <strong>Centroid:</strong> [${cluster.centroid.slice(0, 3).map(v => v.toFixed(3)).join(', ')}...]
+                                </div>
+                            ` : ''}
+                        </div>
+                    `);
+                    clustersList.append(clusterCard);
+                });
+                $('#results').removeClass('hidden');
+            } else {
+                showError('No clusters were created');
+            }
+        }
+        
+        function showError(message) {
+            $('#errorMessage').text(message);
+            $('#error').removeClass('hidden');
+        }
+    });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,41 @@
+{
+  "name": "wvtk",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "build:css": "tailwindcss -i ./input.css -o ./public/css/tailwind.css --watch",
+    "build:css:prod": "tailwindcss -i ./input.css -o ./public/css/tailwind.css --minify",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/5txvn/wvtk.git"
+  },
+  "keywords": [
+    "word-vectors",
+    "nlp",
+    "ai",
+    "machine-learning"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/5txvn/wvtk/issues"
+  },
+  "homepage": "https://github.com/5txvn/wvtk#readme",
+  "description": "Word Vector Toolkit - Interactive tools for exploring word vectors",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "ejs": "^3.1.9",
+    "express": "^5.1.0",
+    "numpy": "^0.0.1",
+    "numpy-parser": "^1.2.3",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "tailwindcss": "^3.4.0"
+  }
+}

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Vector Toolkit</title>
+    <link rel="stylesheet" href="/css/tailwind.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg border-b-4 border-primary">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <i class="fas fa-brain text-3xl text-primary mr-3"></i>
+                    <h1 class="text-2xl font-bold text-gray-800">Word Vector Toolkit</h1>
+                </div>
+                <div class="flex items-center">
+                    <span class="text-sm text-gray-600">Home</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Hero Section -->
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-bold text-gray-800 mb-6">
+                <i class="fas fa-brain text-primary mr-4"></i>
+                Word Vector Toolkit
+            </h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                Explore the power of word vectors with our interactive AI tools. Discover semantic relationships, 
+                find similar words, solve analogies, and more using advanced natural language processing.
+            </p>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+                <div class="text-3xl font-bold text-primary mb-2" id="vocabSize">Loading...</div>
+                <div class="text-gray-600">Vocabulary Size</div>
+            </div>
+            <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+                <div class="text-3xl font-bold text-primary mb-2" id="vectorDims">Loading...</div>
+                <div class="text-gray-600">Vector Dimensions</div>
+            </div>
+            <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+                <div class="text-3xl font-bold text-primary mb-2" id="totalVectors">Loading...</div>
+                <div class="text-gray-600">Total Vectors</div>
+            </div>
+        </div>
+
+        <!-- Tools Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Similar Words -->
+            <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-300 border-l-4 border-primary">
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-search text-primary text-2xl mr-3"></i>
+                    <h3 class="text-xl font-semibold text-gray-800">Similar Words</h3>
+                </div>
+                <p class="text-gray-600 mb-4">
+                    Find words that are semantically similar to any word in our vocabulary using vector similarity.
+                </p>
+                <a href="/tools/similar-words" class="inline-flex items-center text-primary hover:text-primary-dark font-medium">
+                    Try it out
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+
+            <!-- Word Analogies -->
+            <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-300 border-l-4 border-primary">
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-balance-scale text-primary text-2xl mr-3"></i>
+                    <h3 class="text-xl font-semibold text-gray-800">Word Analogies</h3>
+                </div>
+                <p class="text-gray-600 mb-4">
+                    Solve word analogies using vector arithmetic. king - man + woman = queen.
+                </p>
+                <a href="/tools/word-analogies" class="inline-flex items-center text-primary hover:text-primary-dark font-medium">
+                    Try it out
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+
+            <!-- Vector Explorer -->
+            <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-300 border-l-4 border-primary">
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-chart-line text-primary text-2xl mr-3"></i>
+                    <h3 class="text-xl font-semibold text-gray-800">Vector Explorer</h3>
+                </div>
+                <p class="text-gray-600 mb-4">
+                    Explore vector statistics and visualize the distribution of word vectors in our dataset.
+                </p>
+                <a href="/tools/vector-explorer" class="inline-flex items-center text-primary hover:text-primary-dark font-medium">
+                    Try it out
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+
+            <!-- Word Clustering -->
+            <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-300 border-l-4 border-primary">
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-sitemap text-primary text-2xl mr-3"></i>
+                    <h3 class="text-xl font-semibold text-gray-800">Word Clustering</h3>
+                </div>
+                <p class="text-gray-600 mb-4">
+                    Group words into clusters based on their semantic similarity using vector analysis.
+                </p>
+                <a href="/tools/word-clustering" class="inline-flex items-center text-primary hover:text-primary-dark font-medium">
+                    Try it out
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+
+            <!-- Spellchecker -->
+            <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-300 border-l-4 border-accent">
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-spell-check text-accent text-2xl mr-3"></i>
+                    <h3 class="text-xl font-semibold text-gray-800">AI Spellchecker</h3>
+                </div>
+                <p class="text-gray-600 mb-4">
+                    Check spelling using word vector similarity. The AI finds the most semantically similar words for corrections.
+                </p>
+                <a href="/tools/spellchecker" class="inline-flex items-center text-accent hover:text-accent-light font-medium">
+                    Try it out
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+
+            <!-- Chatbot -->
+            <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-300 border-l-4 border-primary-light">
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-robot text-primary-light text-2xl mr-3"></i>
+                    <h3 class="text-xl font-semibold text-gray-800">AI Chatbot</h3>
+                </div>
+                <p class="text-gray-600 mb-4">
+                    Chat with an AI that uses word vectors to find the best matching Q&A pairs. Add your own questions and answers!
+                </p>
+                <a href="/tools/chatbot" class="inline-flex items-center text-primary-light hover:text-primary font-medium">
+                    Try it out
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="mt-16 bg-gray-50 rounded-lg p-8">
+            <h2 class="text-3xl font-bold text-gray-800 text-center mb-8">Key Features</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="text-center">
+                    <i class="fas fa-bolt text-primary text-3xl mb-4"></i>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Fast Processing</h3>
+                    <p class="text-gray-600">Optimized algorithms for quick word vector analysis</p>
+                </div>
+                <div class="text-center">
+                    <i class="fas fa-shield-alt text-primary text-3xl mb-4"></i>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Privacy First</h3>
+                    <p class="text-gray-600">All processing happens locally, no data sent to external servers</p>
+                </div>
+                <div class="text-center">
+                    <i class="fas fa-cogs text-primary text-3xl mb-4"></i>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Advanced AI</h3>
+                    <p class="text-gray-600">State-of-the-art word vector models for accurate results</p>
+                </div>
+                <div class="text-center">
+                    <i class="fas fa-mobile-alt text-primary text-3xl mb-4"></i>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Responsive Design</h3>
+                    <p class="text-gray-600">Works perfectly on desktop, tablet, and mobile devices</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    $(document).ready(function() {
+        // Load vector statistics
+        $.ajax({
+            url: '/api/vector-stats',
+            method: 'GET',
+            success: function(data) {
+                $('#vocabSize').text(data.vocabulary_size.toLocaleString());
+                $('#vectorDims').text(data.vector_dimensions);
+                $('#totalVectors').text(data.total_vectors.toLocaleString());
+            },
+            error: function(xhr) {
+                console.error('Error loading stats:', xhr);
+                $('#vocabSize').text('Error');
+                $('#vectorDims').text('Error');
+                $('#totalVectors').text('Error');
+            }
+        });
+    });
+    </script>
+</body>
+</html> 
