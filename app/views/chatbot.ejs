@@ -10,18 +10,18 @@
 </head>
 <body class="bg-gray-50 min-h-screen">
     <!-- Navigation -->
-    <nav class="bg-white shadow-lg border-b-4 border-primary-light">
+    <nav class="bg-white shadow-lg border-b-4 border-primary-dark">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
                     <a href="/" class="flex items-center">
-                        <i class="fas fa-brain text-3xl text-primary mr-3"></i>
+                        <i class="fas fa-brain text-3xl text-primary-dark mr-3"></i>
                         <h1 class="text-2xl font-bold text-gray-800">Word Vector Toolkit</h1>
                     </a>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <a href="/" class="text-gray-600 hover:text-primary transition-colors">Home</a>
-                    <span class="text-primary-light font-medium">AI Chatbot</span>
+                    <a href="/" class="text-gray-600 hover:text-primary-dark transition-colors">Home</a>
+                    <span class="text-primary-dark font-medium">AI Chatbot</span>
                 </div>
             </div>
         </div>
@@ -32,7 +32,7 @@
             <!-- Header -->
             <div class="text-center mb-8">
                 <h1 class="text-4xl font-bold text-gray-800 mb-4">
-                    <i class="fas fa-robot text-primary-light mr-3"></i>
+                    <i class="fas fa-robot text-primary-dark mr-3"></i>
                     AI Chatbot
                 </h1>
                 <p class="text-lg text-gray-600">
@@ -45,14 +45,14 @@
                 <div class="lg:col-span-2">
                     <div class="bg-white rounded-lg shadow-lg p-6">
                         <h3 class="text-xl font-semibold text-gray-800 mb-4">
-                            <i class="fas fa-comments text-primary-light mr-2"></i>
+                            <i class="fas fa-comments text-primary-dark mr-2"></i>
                             Chat with AI
                         </h3>
                         
                         <!-- Chat Messages -->
                         <div id="chatMessages" class="h-96 overflow-y-auto mb-4 p-4 bg-gray-50 rounded-lg space-y-4">
                             <div class="flex items-start">
-                                <div class="bg-primary-light text-white p-3 rounded-lg max-w-xs">
+                                <div class="bg-primary-dark text-white p-3 rounded-lg max-w-xs">
                                     <p class="text-sm">Hello! I'm an AI chatbot that uses word vectors to find the best answers. Ask me anything!</p>
                                 </div>
                             </div>
@@ -60,11 +60,11 @@
                         
                         <!-- Input Form -->
                         <form id="chatForm" class="flex gap-2">
-                            <input type="text" id="userInput" 
-                                   class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-transparent"
+                            <input type="text" id="userInput" autocomplete="off"
+                                   class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent"
                                    placeholder="Type your message here...">
                             <button type="submit" 
-                                    class="bg-primary-light hover:bg-primary text-white font-semibold py-3 px-6 rounded-lg transition duration-300">
+                                    class="bg-primary-dark hover:bg-primary text-white font-semibold py-3 px-6 rounded-lg transition duration-300">
                                 <i class="fas fa-paper-plane"></i>
                             </button>
                         </form>
@@ -76,7 +76,7 @@
                     <!-- Add Q&A Pair -->
                     <div class="bg-white rounded-lg shadow-lg p-6">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                            <i class="fas fa-plus text-primary-light mr-2"></i>
+                            <i class="fas fa-plus text-primary-dark mr-2"></i>
                             Add Q&A Pair
                         </h3>
                         <form id="qaForm" class="space-y-4">
@@ -84,20 +84,20 @@
                                 <label for="question" class="block text-sm font-medium text-gray-700 mb-2">
                                     Question:
                                 </label>
-                                <input type="text" id="question" name="question" required
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-transparent"
+                                <input type="text" id="question" name="question" required autocomplete="off"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent"
                                        placeholder="Enter a question...">
                             </div>
                             <div>
                                 <label for="answer" class="block text-sm font-medium text-gray-700 mb-2">
                                     Answer:
                                 </label>
-                                <textarea id="answer" name="answer" rows="3" required
-                                          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-light focus:border-transparent"
+                                <textarea id="answer" name="answer" rows="3" required autocomplete="off"
+                                          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-dark focus:border-transparent"
                                           placeholder="Enter the answer..."></textarea>
                             </div>
                             <button type="submit" 
-                                    class="w-full bg-primary-light hover:bg-primary text-white font-semibold py-3 px-6 rounded-lg transition duration-300">
+                                    class="w-full bg-primary-dark hover:bg-primary text-white font-semibold py-3 px-6 rounded-lg transition duration-300">
                                 <i class="fas fa-plus mr-2"></i>
                                 Add Q&A Pair
                             </button>
@@ -107,7 +107,7 @@
                     <!-- Existing Q&A Pairs -->
                     <div class="bg-white rounded-lg shadow-lg p-6">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                            <i class="fas fa-list text-primary-light mr-2"></i>
+                            <i class="fas fa-list text-primary-dark mr-2"></i>
                             Existing Q&A Pairs
                         </h3>
                         <div id="qaList" class="space-y-3 max-h-64 overflow-y-auto">
@@ -146,7 +146,7 @@
             <!-- Loading -->
             <div id="loading" class="hidden text-center py-8">
                 <div class="inline-flex items-center">
-                    <i class="fas fa-spinner fa-spin text-primary-light text-2xl mr-3"></i>
+                    <i class="fas fa-spinner fa-spin text-primary-dark text-2xl mr-3"></i>
                     <span class="text-lg text-gray-600">AI is thinking...</span>
                 </div>
             </div>
@@ -185,13 +185,13 @@
             
             // Make API call
             $.ajax({
-                url: '/api/chatbot',
+                url: '/api/chatbot/ask',
                 method: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify({ message: userInput }),
+                data: JSON.stringify({ question: userInput }),
                 success: function(data) {
                     $('#loading').addClass('hidden');
-                    addMessage(data.response, 'bot');
+                    addMessage(data.answer, 'bot');
                 },
                 error: function(xhr) {
                     $('#loading').addClass('hidden');
@@ -215,7 +215,7 @@
             
             // Make API call to add Q&A pair
             $.ajax({
-                url: '/api/chatbot/qa',
+                url: '/api/chatbot/qa-pairs',
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ question: question, answer: answer }),
@@ -242,7 +242,7 @@
         function addMessage(message, sender) {
             const messageDiv = $(`
                 <div class="flex items-start ${sender === 'user' ? 'justify-end' : ''}">
-                    <div class="${sender === 'user' ? 'bg-primary text-white' : 'bg-primary-light text-white'} p-3 rounded-lg max-w-xs">
+                    <div class="${sender === 'user' ? 'bg-primary-dark text-white' : 'bg-primary text-white'} p-3 rounded-lg max-w-xs">
                         <p class="text-sm">${message}</p>
                     </div>
                 </div>
@@ -253,7 +253,7 @@
         
         function loadQAPairs() {
             $.ajax({
-                url: '/api/chatbot/qa',
+                url: '/api/chatbot/qa-pairs',
                 method: 'GET',
                 success: function(data) {
                     const qaList = $('#qaList');
@@ -290,7 +290,7 @@
         
         function deleteQAPair(index) {
             $.ajax({
-                url: `/api/chatbot/qa/${index}`,
+                url: `/api/chatbot/qa-pairs/${index}`,
                 method: 'DELETE',
                 success: function(data) {
                     loadQAPairs(); // Reload the list

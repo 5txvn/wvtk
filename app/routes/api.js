@@ -75,14 +75,13 @@ router.get('/vocabulary', (req, res) => {
     res.json({ vocabulary: vocabulary.slice(0, 1000) });
 });
 
-router.get('/similar-words/:word', (req, res) => {
-    const { word } = req.params;
-    const { n = 10 } = req.query;
+//get semantically similar words
+router.get('/similar-words/:word/:limit', (req, res) => {
+    console.log("reached");
+    const { word, limit } = req.params;
     
     const wordVector = getWordVector(word);
-    if (!wordVector) {
-        return res.status(404).json({ error: 'Word not found in vocabulary' });
-    }
+    if (!wordVector) return res.status(404).json({ error: 'Word not found in vocabulary' });
     
     const similarities = [];
     for (let i = 0; i < vocabulary.length; i++) {
@@ -97,7 +96,7 @@ router.get('/similar-words/:word', (req, res) => {
     }
     
     similarities.sort((a, b) => b.similarity - a.similarity);
-    res.json({ similar_words: similarities.slice(0, parseInt(n)) });
+    res.json({ similar_words: similarities.slice(0, parseInt(limit)) });
 });
 
 router.post('/word-analogies', (req, res) => {

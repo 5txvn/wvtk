@@ -10,18 +10,18 @@
 </head>
 <body class="bg-gray-50 min-h-screen">
     <!-- Navigation -->
-    <nav class="bg-white shadow-lg border-b-4 border-primary">
+    <nav class="bg-white shadow-lg border-b-4 border-accent">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
                     <a href="/" class="flex items-center">
-                        <i class="fas fa-brain text-3xl text-primary mr-3"></i>
+                        <i class="fas fa-brain text-3xl text-accent mr-3"></i>
                         <h1 class="text-2xl font-bold text-gray-800">Word Vector Toolkit</h1>
                     </a>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <a href="/" class="text-gray-600 hover:text-primary transition-colors">Home</a>
-                    <span class="text-primary font-medium">Word Clustering</span>
+                    <a href="/" class="text-gray-600 hover:text-accent transition-colors">Home</a>
+                    <span class="text-accent font-medium">Word Clustering</span>
                 </div>
             </div>
         </div>
@@ -32,7 +32,7 @@
             <!-- Header -->
             <div class="text-center mb-8">
                 <h1 class="text-4xl font-bold text-gray-800 mb-4">
-                    <i class="fas fa-sitemap text-primary mr-3"></i>
+                    <i class="fas fa-sitemap text-accent mr-3"></i>
                     Word Clustering
                 </h1>
                 <p class="text-lg text-gray-600">
@@ -48,8 +48,8 @@
                             <label for="words" class="block text-sm font-medium text-gray-700 mb-2">
                                 Enter words (comma-separated):
                             </label>
-                            <textarea id="words" name="words" rows="4" required
-                                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                            <textarea id="words" name="words" rows="4" required autocomplete="off"
+                                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                                       placeholder="e.g., king, queen, prince, princess, man, woman, boy, girl, computer, laptop, phone, tablet"></textarea>
                         </div>
                         <div class="space-y-4">
@@ -58,7 +58,7 @@
                                     Number of clusters:
                                 </label>
                                 <select id="numClusters" name="numClusters"
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
                                     <option value="2">2</option>
                                     <option value="3" selected>3</option>
                                     <option value="4">4</option>
@@ -71,7 +71,7 @@
                                     Clustering algorithm:
                                 </label>
                                 <select id="algorithm" name="algorithm"
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
                                     <option value="kmeans">K-Means</option>
                                     <option value="hierarchical">Hierarchical</option>
                                 </select>
@@ -79,7 +79,7 @@
                         </div>
                     </div>
                     <button type="submit" 
-                            class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-6 rounded-lg transition duration-300 flex items-center justify-center">
+                            class="w-full bg-accent hover:bg-accent-light text-white font-semibold py-3 px-6 rounded-lg transition duration-300 flex items-center justify-center">
                         <i class="fas fa-sitemap mr-2"></i>
                         Create Clusters
                     </button>
@@ -120,7 +120,7 @@
             <div id="results" class="hidden">
                 <div class="bg-white rounded-lg shadow-lg p-6">
                     <h2 class="text-2xl font-bold text-gray-800 mb-4">
-                        <i class="fas fa-list text-primary mr-2"></i>
+                        <i class="fas fa-list text-accent mr-2"></i>
                         Clustering Results
                     </h2>
                     <div id="clustersList" class="space-y-6"></div>
@@ -130,7 +130,7 @@
             <!-- Loading -->
             <div id="loading" class="hidden text-center py-8">
                 <div class="inline-flex items-center">
-                    <i class="fas fa-spinner fa-spin text-primary text-2xl mr-3"></i>
+                    <i class="fas fa-spinner fa-spin text-accent text-2xl mr-3"></i>
                     <span class="text-lg text-gray-600">Creating clusters...</span>
                 </div>
             </div>
@@ -167,14 +167,8 @@
             
             // Make API call
             $.ajax({
-                url: '/api/word-clustering',
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    words: words.split(',').map(w => w.trim()),
-                    num_clusters: parseInt(numClusters),
-                    algorithm: algorithm
-                }),
+                url: `/api/word-clustering/${encodeURIComponent(words)}/${numClusters}`,
+                method: 'GET',
                 success: function(data) {
                     $('#loading').addClass('hidden');
                     displayResults(data);
@@ -207,12 +201,12 @@
                     const clusterCard = $(`
                         <div class="border border-gray-200 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                                <i class="fas fa-circle text-primary mr-2"></i>
+                                <i class="fas fa-circle text-accent mr-2"></i>
                                 Cluster ${clusterIndex + 1} (${cluster.words.length} words)
                             </h3>
                             <div class="flex flex-wrap gap-2">
                                 ${cluster.words.map(word => `
-                                    <span class="bg-primary text-white px-3 py-1 rounded-full text-sm font-medium">
+                                    <span class="bg-accent text-white px-3 py-1 rounded-full text-sm font-medium">
                                         ${word}
                                     </span>
                                 `).join('')}
